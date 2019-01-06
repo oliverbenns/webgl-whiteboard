@@ -8,17 +8,17 @@ const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const dot = new Dot();
 
 const createDotVerts = (dot: Dot) => [
-  new Vector(dot.position.x, dot.position.y),
-  new Vector(dot.position.y, dot.position.y),
-  new Vector(dot.position.y, dot.position.x),
+  new Vector(0, 0),
+  new Vector(0, dot.scale),
+  new Vector(dot.scale, 0),
 ]
 
 const verts = createDotVerts(dot)
 
 const colors = [
-  new Color(100, 100, 100),
-  new Color(100, 100, 100),
-  new Color(100, 100, 100),
+  new Color(100, 100, 255),
+  new Color(100, 255, 100),
+  new Color(255, 100, 100),
 ]
 
 const renderer = new Renderer(canvas);

@@ -44,6 +44,7 @@ export default class Renderer {
 
     gl.uniform2f(this.uniforms.resolution, gl.canvas.width, gl.canvas.height);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
   }
 
   setVerticesAttributePointer() {
@@ -65,13 +66,12 @@ export default class Renderer {
   }
 
   bufferColors(colors: Color[]) {
-    const colors = colors
+    const _colors = colors
       .map(c => c.toArray())
       .reduce(flatten, []); // @TODO flatten deep?
 
-    console.log('colors', colors);
-
-    const data = new Uint8Array(colors);
+    const data = new Uint8Array(_colors);
+    console.log('color data', data);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorsBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
@@ -82,9 +82,8 @@ export default class Renderer {
       .map(v => v.toArray())
       .reduce(flatten, []);
 
-    console.log('vertices', vertices);
-
     const data = new Float32Array(vertices);
+    console.log('vertices data', data);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.verticesBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);

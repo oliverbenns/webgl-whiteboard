@@ -1,7 +1,6 @@
 import Color from './color';
 import Vector from './vector';
 
-// @TODO: use 'pick' type here.
 type DotOptions = Partial<{
   color: Color;
   scale: number;
@@ -14,7 +13,7 @@ export default class Dot {
 
   constructor(options: DotOptions = {}) {
     this.color = new Color();
-    this.scale = 5;
+    this.scale = 100;
     this.position = new Vector();
   }
 }
