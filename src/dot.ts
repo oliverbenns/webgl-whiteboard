@@ -1,19 +1,20 @@
-import Color from './color';
-import Vector from './vector';
+import Color from "./color";
+import Vector from "./vector";
 
 type DotOptions = Partial<{
   color: Color;
   scale: number;
-}>
+  position: Vector;
+}>;
 
 export default class Dot {
-  public color: Color;
-  public scale: number;
+  public color: Color = new Color();
+  public scale: number = 100;
   public position: Vector;
 
   constructor(options: DotOptions = {}) {
-    this.color = new Color();
-    this.scale = 100;
-    this.position = new Vector();
+    if (options.position) {
+      this.position = options.position;
+    }
   }
 }
