@@ -1,4 +1,8 @@
-const create = (gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader) => {
+const create = (
+  gl: WebGLRenderingContext,
+  vertexShader: WebGLShader,
+  fragmentShader: WebGLShader
+) => {
   const program = gl.createProgram();
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
@@ -7,7 +11,7 @@ const create = (gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentSh
   const success = gl.getProgramParameter(program, gl.LINK_STATUS);
 
   if (!success) {
-    const log = gl.getProgramInfoLog(program)
+    const log = gl.getProgramInfoLog(program);
     console.error(log);
     gl.deleteProgram(program);
     return null;
@@ -17,5 +21,5 @@ const create = (gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentSh
 };
 
 export default {
-  create,
+  create
 };

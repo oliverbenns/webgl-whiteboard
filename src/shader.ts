@@ -16,5 +16,5 @@ const create = (gl: WebGLRenderingContext, type: GLenum, source: string) => {
 };
 
 export default {
-  create,
+  create
 };
