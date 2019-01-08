@@ -6,9 +6,6 @@ import fragmentShaderSource from "./fragment.frag";
 import shader from "./shader";
 import { flatten } from "./utils";
 
-console.log("vertexShaderSource", vertexShaderSource);
-console.log("fragmentShaderSource", fragmentShaderSource);
-
 export default class Renderer {
   gl: WebGL2RenderingContext; // @TODO: make private
   colorsBuffer: WebGLBuffer;
