@@ -15,7 +15,7 @@ whiteboard.subscribeToMouse();
 
 const renderer = new Renderer(canvas);
 
-renderer.setVerticesAttributePointer();
+renderer.setVectorsAttributePointer();
 renderer.setColorsAttributePointer();
 
 const render = () => {
@@ -42,7 +42,7 @@ const render = () => {
   console.log("verts", verts);
   console.log("colors", colors);
 
-  renderer.bufferVertices(verts);
+  renderer.bufferVectors(verts);
   renderer.bufferColors(colors);
 
   renderer.render();

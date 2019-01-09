@@ -9,7 +9,7 @@ import { flatten } from "./utils";
 export default class Renderer {
   gl: WebGL2RenderingContext; // @TODO: make private
   colorsBuffer: WebGLBuffer;
-  verticesBuffer: WebGLBuffer;
+  vectorsBuffer: WebGLBuffer;
   program: WebGLProgram;
   vao: WebGLVertexArrayObject;
   uniforms: {
@@ -40,7 +40,7 @@ export default class Renderer {
 
     this.gl = gl;
     this.colorsBuffer = gl.createBuffer();
-    this.verticesBuffer = gl.createBuffer();
+    this.vectorsBuffer = gl.createBuffer();
     this.program = program;
     this.vao = gl.createVertexArray();
     gl.bindVertexArray(this.vao);
@@ -54,8 +54,8 @@ export default class Renderer {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   }
 
-  setVerticesAttributePointer() {
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.verticesBuffer);
+  setVectorsAttributePointer() {
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vectorsBuffer);
     const positionAttribute = this.gl.getAttribLocation(
       this.program,
       "a_position"
@@ -99,13 +99,12 @@ export default class Renderer {
     this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
   }
 
-  bufferVertices(vectors: Vector[]) {
-    const vertices = vectors.map(v => v.toArray()).reduce(flatten, []);
+  bufferVectors(vectors: Vector[]) {
+    const vectorData = vectors.map(v => v.toArray()).reduce(flatten, []);
 
-    const data = new Float32Array(vertices);
-    console.log("vertices data", data);
+    const data = new Float32Array(vectorData);
 
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.verticesBuffer);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vectorsBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
   }
 
