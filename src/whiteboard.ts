@@ -4,7 +4,7 @@ import Vector from "./vector";
 export default class Whiteboard {
   public dots: Dot[] = [];
 
-  subscribeToMouse() {
+  constructor() {
     window.addEventListener("click", this.onMouseClick);
   }
 

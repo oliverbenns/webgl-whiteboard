@@ -41,4 +41,12 @@ export default class Dot {
     //   new Vector();
     // }
   }
+
+  createColors() {
+    return [
+      new Color(100, 100, 255),
+      new Color(100, 255, 100),
+      new Color(255, 100, 100)
+    ];
+  }
 }

@@ -3,12 +3,14 @@
 in vec2 a_position;
 in vec4 a_color;
 uniform vec2 u_resolution;
+uniform vec2 u_camera_position;
 
 out vec4 v_color;
 
 void main() {
+  vec2 newPosition = u_camera_position + a_position;
   // convert the position from pixels to 0.0 to 1.0
-  vec2 zeroToOne = a_position / u_resolution;
+  vec2 zeroToOne = newPosition / u_resolution;
 
   // convert from 0->1 to 0->2
   vec2 zeroToTwo = zeroToOne * 2.0;

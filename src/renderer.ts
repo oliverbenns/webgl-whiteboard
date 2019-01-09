@@ -15,6 +15,7 @@ export default class Renderer {
   uniforms: {
     transform: WebGLUniformLocation;
     resolution: WebGLUniformLocation;
+    cameraPosition: WebGLUniformLocation;
   };
 
   constructor(canvas: HTMLCanvasElement) {
@@ -39,7 +40,7 @@ export default class Renderer {
     gl.useProgram(program);
 
     this.gl = gl;
-    this.colorsBuffer = gl.createBuffer();
+    this.colorBuffer = gl.createBuffer();
     this.vectorsBuffer = gl.createBuffer();
     this.program = program;
     this.vao = gl.createVertexArray();
@@ -47,10 +48,12 @@ export default class Renderer {
 
     this.uniforms = {
       transform: gl.getUniformLocation(this.program, "u_transform"),
-      resolution: gl.getUniformLocation(this.program, "u_resolution")
+      resolution: gl.getUniformLocation(this.program, "u_resolution"),
+      cameraPosition: gl.getUniformLocation(this.program, "u_camera_position")
     };
 
     gl.uniform2f(this.uniforms.resolution, gl.canvas.width, gl.canvas.height);
+    gl.uniform2f(this.uniforms.cameraPosition, 5, 5);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   }
 
@@ -99,7 +102,6 @@ export default class Renderer {
 
   bufferVectors(vectors: Vector[]) {
     const vectorData = vectors.map(v => v.toArray()).reduce(flatten, []);
-
     const data = new Float32Array(vectorData);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vectorsBuffer);
