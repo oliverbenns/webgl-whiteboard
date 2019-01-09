@@ -20,13 +20,7 @@ renderer.setColorsAttributePointer();
 
 const render = () => {
   const verts = whiteboard.dots
-    .map(dot => {
-      return [
-        new Vector(0, 0),
-        new Vector(0, dot.scale),
-        new Vector(dot.scale, 0)
-      ];
-    })
+    .map(dot => dot.createVectors())
     .reduce(flatten, []);
 
   const colors = whiteboard.dots
