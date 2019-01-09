@@ -8,7 +8,7 @@ import { flatten } from "./utils";
 
 export default class Renderer {
   gl: WebGL2RenderingContext; // @TODO: make private
-  colorsBuffer: WebGLBuffer;
+  colorBuffer: WebGLBuffer;
   vectorsBuffer: WebGLBuffer;
   program: WebGLProgram;
   vao: WebGLVertexArrayObject;
@@ -75,7 +75,7 @@ export default class Renderer {
   }
 
   setColorsAttributePointer() {
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorsBuffer);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
     const colorAttribute = this.gl.getAttribLocation(this.program, "a_color");
 
     this.gl.enableVertexAttribArray(colorAttribute);
@@ -90,12 +90,10 @@ export default class Renderer {
   }
 
   bufferColors(colors: Color[]) {
-    const _colors = colors.map(c => c.toArray()).reduce(flatten, []); // @TODO flatten deep?
+    const colorData = colors.map(c => c.toArray()).reduce(flatten, []); // @TODO flatten deep?
+    const data = new Uint8Array(colorData);
 
-    const data = new Uint8Array(_colors);
-    console.log("color data", data);
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorsBuffer);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
   }
 
