@@ -5,8 +5,15 @@ import vertexShaderSource from "./vertex.vert";
 import fragmentShaderSource from "./fragment.frag";
 import shader from "./shader";
 import { flatten } from "./utils";
+import App from "./app";
+
+interface RendererOptions {
+  app: App;
+  canvas: HTMLCanvasElement;
+}
 
 export default class Renderer {
+  app: App;
   gl: WebGL2RenderingContext; // @TODO: make private
   colorBuffer: WebGLBuffer;
   vectorsBuffer: WebGLBuffer;
@@ -18,12 +25,14 @@ export default class Renderer {
     cameraPosition: WebGLUniformLocation;
   };
 
-  constructor(canvas: HTMLCanvasElement) {
-    const gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
+  constructor(options: RendererOptions) {
+    const gl = options.canvas.getContext("webgl2") as WebGL2RenderingContext;
 
     if (!gl) {
       throw new Error("WebGL is not supported.");
     }
+
+    this.app = options.app;
 
     const vertexShader = shader.create(
       gl,
@@ -52,9 +61,22 @@ export default class Renderer {
       cameraPosition: gl.getUniformLocation(this.program, "u_camera_position")
     };
 
-    gl.uniform2f(this.uniforms.resolution, gl.canvas.width, gl.canvas.height);
-    gl.uniform2f(this.uniforms.cameraPosition, 5, 5);
+    this.setUniforms();
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  }
+
+  setUniforms() {
+    this.gl.uniform2f(
+      this.uniforms.resolution,
+      this.gl.canvas.width,
+      this.gl.canvas.height
+    );
+
+    this.gl.uniform2f(
+      this.uniforms.cameraPosition,
+      this.app.camera.position.x,
+      this.app.camera.position.y
+    );
   }
 
   setVectorsAttributePointer() {
@@ -109,9 +131,25 @@ export default class Renderer {
   }
 
   // @TODO: add vao and transform uniform as class member.
-  render() {
+  render = () => {
     this.gl.clearColor(0, 0, 0, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+    this.setUniforms();
+
+    const verts = this.app.whiteboard.dots
+      .map(dot => dot.body.vectors)
+      .reduce(flatten, []);
+
+    // const a = this.app.whiteboard.dots.map(dot => dot.body.colors);
+    console.log("this.app.whiteboard.dots", this.app.whiteboard.dots);
+
+    const colors = this.app.whiteboard.dots
+      .map(dot => dot.body.colors)
+      .reduce(flatten, []);
+
+    this.bufferVectors(verts);
+    this.bufferColors(colors);
 
     const primitiveType = this.gl.TRIANGLES;
     // @NOTE: If we ever have scene entities of different vertex lengths,
@@ -122,7 +160,5 @@ export default class Renderer {
     const offset = 0;
     const count = 3;
     this.gl.drawArrays(primitiveType, offset, count);
-
-    // scene.entities.forEach((e, i) => this.renderEntity(e, i))
-  }
+  };
 }

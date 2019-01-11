@@ -11,27 +11,12 @@ canvas.height = window.innerHeight;
 
 const app = new App();
 
-const renderer = new Renderer(canvas);
+const renderer = new Renderer({
+  app,
+  canvas
+});
 
 renderer.setVectorsAttributePointer();
 renderer.setColorsAttributePointer();
 
-const render = () => {
-  const verts = app.whiteboard.dots
-    .map(dot => dot.createVectors())
-    .reduce(flatten, []);
-
-  const colors = app.whiteboard.dots
-    .map(dot => dot.createColors())
-    .reduce(flatten, []);
-
-  console.log("verts", verts);
-  console.log("colors", colors);
-
-  renderer.bufferVectors(verts);
-  renderer.bufferColors(colors);
-
-  renderer.render();
-};
-
-window.addEventListener("click", render);
+window.addEventListener("click", renderer.render);
