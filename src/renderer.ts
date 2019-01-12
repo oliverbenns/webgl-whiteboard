@@ -138,15 +138,18 @@ export default class Renderer {
     this.setUniforms();
 
     const verts = this.app.whiteboard.dots
-      .map(dot => dot.body.vectors)
+      .map(dot => dot.mesh.vectors)
       .reduce(flatten, []);
 
     // const a = this.app.whiteboard.dots.map(dot => dot.body.colors);
     console.log("this.app.whiteboard.dots", this.app.whiteboard.dots);
 
     const colors = this.app.whiteboard.dots
-      .map(dot => dot.body.colors)
+      .map(dot => dot.mesh.colors)
       .reduce(flatten, []);
+
+    console.log("verts", verts);
+    console.log("colors", colors);
 
     this.bufferVectors(verts);
     this.bufferColors(colors);
@@ -158,7 +161,8 @@ export default class Renderer {
     // const offset = index * entity.geometry.vertices.length;
     // const count = entity.geometry.vertices.length;
     const offset = 0;
-    const count = 3;
+    const count = verts.length;
+    console.log("count", count);
     this.gl.drawArrays(primitiveType, offset, count);
   };
 }

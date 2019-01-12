@@ -1,6 +1,7 @@
 import Color from "./color";
 import Body from "./body";
 import Vector from "./vector";
+import Mesh from "./mesh";
 
 interface DotOptions {
   color: Color;
@@ -8,10 +9,9 @@ interface DotOptions {
 }
 
 export default class Dot {
-  // public color = new Color();
   public scale: number = 100;
   public position: Vector;
-  public body: Body;
+  public mesh: Mesh;
 
   constructor(options: DotOptions) {
     this.position = options.position;
@@ -24,6 +24,6 @@ export default class Dot {
       new Vector(this.scale, 0)
     ];
 
-    this.body = new Body({ colors, vectors });
+    this.mesh = new Mesh({ colors, vectors });
   }
 }

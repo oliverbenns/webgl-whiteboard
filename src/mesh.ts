@@ -1,16 +1,16 @@
 import Color from "color";
 import Vector from "vector";
 
-interface BodyOptions {
+interface MeshOptions {
   colors: Color[];
   vectors: Vector[];
 }
 
-export default class Body {
+export default class Mesh {
   colors: Color[];
   vectors: Vector[];
 
-  constructor(options: BodyOptions) {
+  constructor(options: MeshOptions) {
     this.colors = options.colors;
     this.vectors = options.vectors;
   }
