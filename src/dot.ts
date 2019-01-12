@@ -1,5 +1,4 @@
 import Color from "./color";
-import Body from "./body";
 import Vector from "./vector";
 import Mesh from "./mesh";
 
