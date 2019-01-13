@@ -33,7 +33,7 @@ export default class Camera {
     }
   };
 
-  onMouseClick = ev => {
+  onMouseClick = () => {
     this.position.x += 5;
     this.position.y += 5;
   };

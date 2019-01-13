@@ -4,6 +4,11 @@ const create = (
   fragmentShader: WebGLShader
 ) => {
   const program = gl.createProgram();
+
+  if (!program) {
+    return null;
+  }
+
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
   gl.linkProgram(program);

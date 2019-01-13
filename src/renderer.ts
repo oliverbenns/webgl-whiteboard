@@ -20,9 +20,9 @@ export default class Renderer {
   program: WebGLProgram;
   vao: WebGLVertexArrayObject;
   uniforms: {
-    transform: WebGLUniformLocation;
-    resolution: WebGLUniformLocation;
-    cameraPosition: WebGLUniformLocation;
+    transform: WebGLUniformLocation | null;
+    resolution: WebGLUniformLocation | null;
+    cameraPosition: WebGLUniformLocation | null;
   };
 
   constructor(options: RendererOptions) {
@@ -39,20 +39,44 @@ export default class Renderer {
       gl.VERTEX_SHADER,
       vertexShaderSource
     );
+
     const fragmentShader = shader.create(
       gl,
       gl.FRAGMENT_SHADER,
       fragmentShaderSource
     );
 
+    if (!vertexShader || !fragmentShader) {
+      throw new Error("Error creating shaders");
+    }
+
     const program = _program.create(gl, vertexShader, fragmentShader);
+
+    if (!program) {
+      throw new Error("Error creating WebGL program.");
+    }
+
     gl.useProgram(program);
 
     this.gl = gl;
-    this.colorBuffer = gl.createBuffer();
-    this.vectorsBuffer = gl.createBuffer();
+
+    const colorBuffer = gl.createBuffer();
+    const vectorsBuffer = gl.createBuffer();
+
+    if (!colorBuffer || !vectorsBuffer) {
+      throw new Error("Error creating WebGL buffers");
+    }
+
+    this.colorBuffer = colorBuffer;
+    this.vectorsBuffer = vectorsBuffer;
     this.program = program;
-    this.vao = gl.createVertexArray();
+
+    const vao = gl.createVertexArray();
+
+    if (!vao) {
+      throw new Error("Error creating vertex array");
+    }
+    this.vao = vao;
     gl.bindVertexArray(this.vao);
 
     this.uniforms = {

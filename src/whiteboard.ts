@@ -9,7 +9,7 @@ export default class Whiteboard {
     window.addEventListener("click", this.onMouseClick);
   }
 
-  onMouseClick = ev => {
+  onMouseClick = (ev: MouseEvent) => {
     // console.log(ev.screenX, ev.screenY);
     const r = Math.floor(Math.random() * 255);
     const g = Math.floor(Math.random() * 255);
