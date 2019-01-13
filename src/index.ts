@@ -19,4 +19,5 @@ const renderer = new Renderer({
 renderer.setVectorsAttributePointer();
 renderer.setColorsAttributePointer();
 
+window.addEventListener("keydown", renderer.render);
 window.addEventListener("click", renderer.render);
