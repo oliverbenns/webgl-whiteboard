@@ -165,15 +165,9 @@ export default class Renderer {
       .map(dot => dot.mesh.vectors)
       .reduce(flatten, []);
 
-    // const a = this.app.whiteboard.dots.map(dot => dot.body.colors);
-    console.log("this.app.whiteboard.dots", this.app.whiteboard.dots);
-
     const colors = this.app.whiteboard.dots
       .map(dot => dot.mesh.colors)
       .reduce(flatten, []);
-
-    console.log("verts", verts);
-    console.log("colors", colors);
 
     this.bufferVectors(verts);
     this.bufferColors(colors);
