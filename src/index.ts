@@ -1,6 +1,5 @@
 import Dot from "./dot";
 import Color from "./color";
-import Vector from "./vector";
 import Renderer from "./renderer";
 import App from "./app";
 import { flatten } from "./utils";
