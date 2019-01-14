@@ -3,8 +3,8 @@ export default class Vector {
   y: number;
 
   constructor(x = 0, y = 0) {
-    this.y = y;
     this.x = x;
+    this.y = y;
   }
 
   toArray() {
@@ -23,6 +23,18 @@ export default class Vector {
   }
 
   update(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
+  }
+
+  clone() {
+    return new Vector(this.x, this.y);
+  }
+
+  rotate(angle: number) {
+    const x = this.x * Math.cos(angle) - this.y * Math.sin(angle);
+    const y = this.x * Math.sin(angle) + this.y * Math.cos(angle);
+
     this.x = x;
     this.y = y;
   }

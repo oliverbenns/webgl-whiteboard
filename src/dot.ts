@@ -1,6 +1,7 @@
 import Color from "./color";
 import Vector from "./vector";
 import Mesh from "./mesh";
+import CircleMesh from "./circle-mesh";
 
 interface DotOptions {
   color: Color;
@@ -15,14 +16,10 @@ export default class Dot {
   constructor(options: DotOptions) {
     this.position = options.position;
 
-    const colors = [options.color, options.color, options.color];
-
-    const vectors = [
-      new Vector(0, 0),
-      new Vector(0, this.scale * 2),
-      new Vector(this.scale, 0)
-    ];
-
-    this.mesh = new Mesh({ colors, vectors });
+    this.mesh = new CircleMesh({
+      color: options.color,
+      polyCount: 64,
+      radius: this.scale
+    });
   }
 }
