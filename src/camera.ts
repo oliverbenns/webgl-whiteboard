@@ -12,7 +12,6 @@ export default class Camera {
 
   constructor() {
     window.addEventListener("click", this.onMouseClick);
-    console.log("document", document);
     window.addEventListener("keydown", this.onKeyPress);
   }
 
