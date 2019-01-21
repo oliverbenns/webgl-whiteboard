@@ -8,7 +8,7 @@ const enum Key {
   Right = 39
 }
 export default class Camera {
-  public position = new Vector(250, 250);
+  public position = new Vector(0, 0);
 
   constructor() {
     window.addEventListener("click", this.onMouseClick);
