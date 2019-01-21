@@ -5,7 +5,6 @@ import Vector from "./vector";
 interface CircleMeshOptions {
   color: Color;
   polyCount: number;
-  radius: number;
 }
 
 export default class CircleMesh extends Mesh {
@@ -16,7 +15,7 @@ export default class CircleMesh extends Mesh {
 
     const createFace = () => {
       const a = new Vector(0, 0);
-      const b = new Vector(0, options.radius);
+      const b = new Vector(0, 1);
       const c = b.clone();
       c.rotate(originAngle);
 
