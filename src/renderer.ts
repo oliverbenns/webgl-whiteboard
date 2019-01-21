@@ -156,7 +156,7 @@ export default class Renderer {
 
   // @TODO: add vao and transform uniform as class member.
   render = () => {
-    this.gl.clearColor(0, 0, 0, 0);
+    this.gl.clearColor(255, 255, 255, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
     this.setUniforms();

@@ -10,12 +10,8 @@ export default class Whiteboard {
   }
 
   onMouseClick = (ev: MouseEvent) => {
-    const r = Math.floor(Math.random() * 255);
-    const g = Math.floor(Math.random() * 255);
-    const b = Math.floor(Math.random() * 255);
-
-    const color = new Color(r, g, b);
     const position = new Vector(ev.screenX, ev.screenY);
+    const color = new Color(0, 0, 0);
 
     const dot = new Dot({ color, position });
 
