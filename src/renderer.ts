@@ -6,6 +6,7 @@ import fragmentShaderSource from "./fragment.frag";
 import shader from "./shader";
 import { flatten } from "./utils";
 import App from "./app";
+import Entity from "./entity";
 
 interface RendererOptions {
   app: App;
@@ -20,9 +21,10 @@ export default class Renderer {
   program: WebGLProgram;
   vao: WebGLVertexArrayObject;
   uniforms: {
-    transform: WebGLUniformLocation | null;
     resolution: WebGLUniformLocation | null;
     cameraPosition: WebGLUniformLocation | null;
+    position: WebGLUniformLocation | null;
+    scale: WebGLUniformLocation | null;
   };
 
   constructor(options: RendererOptions) {
@@ -80,13 +82,27 @@ export default class Renderer {
     gl.bindVertexArray(this.vao);
 
     this.uniforms = {
-      transform: gl.getUniformLocation(this.program, "u_transform"),
+      // once
       resolution: gl.getUniformLocation(this.program, "u_resolution"),
-      cameraPosition: gl.getUniformLocation(this.program, "u_camera_position")
+      cameraPosition: gl.getUniformLocation(this.program, "u_camera_position"),
+
+      // per entity
+      position: gl.getUniformLocation(this.program, "u_position"),
+      scale: gl.getUniformLocation(this.program, "u_scale")
     };
 
     this.setUniforms();
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  }
+
+  setTransformUniforms(entity: Entity) {
+    this.gl.uniform2f(
+      this.uniforms.position,
+      entity.position.x,
+      entity.position.y
+    );
+
+    this.gl.uniform2f(this.uniforms.scale, entity.scale.x, entity.scale.y);
   }
 
   setUniforms() {
@@ -172,15 +188,20 @@ export default class Renderer {
     this.bufferVectors(verts);
     this.bufferColors(colors);
 
+    this.app.whiteboard.dots.forEach((entity, index) => {
+      this.renderEntity(entity, index);
+    });
+  };
+
+  renderEntity(entity: Entity, index: number) {
+    this.setTransformUniforms(entity);
+
     const primitiveType = this.gl.TRIANGLES;
     // @NOTE: If we ever have scene entities of different vertex lengths,
     // we will need to keep track of the offset. Either in a var or using a
     // .reduce instead of .forEach?
-    // const offset = index * entity.geometry.vertices.length;
-    // const count = entity.geometry.vertices.length;
-    const offset = 0;
-    const count = verts.length;
-    console.log("count", count);
+    const offset = index * entity.mesh.vectors.length;
+    const count = entity.mesh.vectors.length;
     this.gl.drawArrays(primitiveType, offset, count);
-  };
+  }
 }

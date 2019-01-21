@@ -1,25 +1,28 @@
-import Color from "./color";
-import Vector from "./vector";
-import Mesh from "./mesh";
 import CircleMesh from "./circle-mesh";
+import Color from "./color";
+import Entity from "./entity";
+import Mesh from "./mesh";
+import Vector from "./vector";
 
 interface DotOptions {
   color: Color;
   position: Vector;
 }
 
-export default class Dot {
-  public scale: number = 100;
-  public position: Vector;
-  public mesh: Mesh;
-
+class Dot extends Entity {
   constructor(options: DotOptions) {
-    this.position = options.position;
+    const position = options.position;
+    console.log("options.position", options.position);
 
-    this.mesh = new CircleMesh({
+    const mesh = new CircleMesh({
       color: options.color,
-      polyCount: 64,
-      radius: this.scale
+      polyCount: 64
     });
+
+    const scale = new Vector(32, 32);
+
+    super({ mesh, position, scale });
   }
 }
+
+export default Dot;

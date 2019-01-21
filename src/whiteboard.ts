@@ -10,8 +10,8 @@ export default class Whiteboard {
   }
 
   onMouseClick = (ev: MouseEvent) => {
-    const position = new Vector(ev.screenX, ev.screenY);
     const color = new Color(0, 0, 0);
+    const position = new Vector(ev.x, ev.y);
 
     const dot = new Dot({ color, position });
 
