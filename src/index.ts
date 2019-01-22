@@ -2,6 +2,8 @@ import Dot from "./dot";
 import Color from "./color";
 import Renderer from "./renderer";
 import App from "./app";
+import Mouse from "./mouse";
+import Keyboard from "./keyboard";
 import { flatten } from "./utils";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -18,5 +20,5 @@ const renderer = new Renderer({
 renderer.setVectorsAttributePointer();
 renderer.setColorsAttributePointer();
 
-window.addEventListener("keydown", renderer.render);
-window.addEventListener("click", renderer.render);
+Keyboard.subscribe("keydown", renderer.render);
+Mouse.subscribe("click", renderer.render);

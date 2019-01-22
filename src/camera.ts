@@ -1,5 +1,6 @@
 import Dot from "./dot";
 import Vector from "./vector";
+import Keyboard from "./keyboard";
 
 const enum Key {
   Up = 38,
@@ -11,8 +12,7 @@ export default class Camera {
   public position = new Vector(0, 0);
 
   constructor() {
-    window.addEventListener("click", this.onMouseClick);
-    window.addEventListener("keydown", this.onKeyPress);
+    Keyboard.subscribe("keypress", this.onKeyPress);
   }
 
   onKeyPress = (ev: KeyboardEvent) => {
@@ -30,10 +30,5 @@ export default class Camera {
         this.position.x += 5;
         break;
     }
-  };
-
-  onMouseClick = () => {
-    this.position.x += 5;
-    this.position.y += 5;
   };
 }

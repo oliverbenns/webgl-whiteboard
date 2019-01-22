@@ -2,18 +2,19 @@ import Color from "./color";
 import Dot from "./dot";
 import Vector from "./vector";
 
+import Mouse, { _MouseEvent } from "./mouse";
+
 export default class Whiteboard {
   public dots: Dot[] = [];
 
   constructor() {
-    window.addEventListener("click", this.onMouseClick);
+    Mouse.subscribe("click", this.onMouseClick);
   }
 
-  onMouseClick = (ev: MouseEvent) => {
+  onMouseClick = (ev: _MouseEvent) => {
     const color = new Color(0, 0, 0);
-    const position = new Vector(ev.x, ev.y);
 
-    const dot = new Dot({ color, position });
+    const dot = new Dot({ color, position: ev.position });
 
     this.addDot(dot);
   };
