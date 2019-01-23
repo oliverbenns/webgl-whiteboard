@@ -1,8 +1,12 @@
 import Color from "./color";
 import Dot from "./dot";
 import Vector from "./vector";
+import Camera from "./camera";
 
 import Mouse, { _MouseEvent } from "./mouse";
+
+// @TODO: We have a camera already, don't create a new one!
+const camera = new Camera();
 
 export default class Whiteboard {
   public dots: Dot[] = [];
@@ -14,7 +18,9 @@ export default class Whiteboard {
   onMouseClick = (ev: _MouseEvent) => {
     const color = new Color(0, 0, 0);
 
-    const dot = new Dot({ color, position: ev.position });
+    const position = this.screenToWorldPosition(ev);
+
+    const dot = new Dot({ color, position });
 
     this.addDot(dot);
   };
@@ -22,5 +28,12 @@ export default class Whiteboard {
   addDot(dot: Dot) {
     this.dots.push(dot);
     console.log("this.dots", this.dots);
+  }
+
+  screenToWorldPosition(ev: _MouseEvent) {
+    const x = ev.position.x - camera.position.x;
+    const y = ev.position.y - camera.position.y;
+
+    return new Vector(x, y);
   }
 }
