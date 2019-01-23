@@ -20,5 +20,5 @@ const renderer = new Renderer({
 renderer.setVectorsAttributePointer();
 renderer.setColorsAttributePointer();
 
-Keyboard.subscribe("keydown", renderer.render);
+Keyboard.subscribe("keypress", renderer.render);
 Mouse.subscribe("click", renderer.render);
