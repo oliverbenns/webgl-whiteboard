@@ -14,24 +14,26 @@ export default class Camera {
   }
 
   onKeyDown = (ev: KeyboardEvent) => {
-    if (ev.which === Key.Space) {
+    if (ev.which === Key.Space && !this.dragMode) {
       this.dragMode = true;
+      document.body.style.cursor = "grab";
     }
   };
 
   onKeyUp = (ev: KeyboardEvent) => {
     if (ev.which === Key.Space) {
       this.dragMode = false;
+      document.body.style.cursor = "default";
     }
   };
 
   onMouseDrag = (ev: _MouseEvent) => {
-    if (this.dragMode) {
-      // @TODO: Need to determine previous position and new position.
-      // This is not right, offset should be from last drag event, not initial one.
-      const offset = ev.target.subtract(ev.origin);
-      this.position.x += offset.x;
-      this.position.y += offset.y;
+    if (!this.dragMode) {
+      return;
     }
+
+    const offset = ev.target.subtract(ev.origin);
+    this.position.x += offset.x;
+    this.position.y += offset.y;
   };
 }
