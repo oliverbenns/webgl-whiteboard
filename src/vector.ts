@@ -38,4 +38,11 @@ export default class Vector {
     this.x = x;
     this.y = y;
   }
+
+  subtract(a: Vector) {
+    const x = this.x - a.x;
+    const y = this.y - a.y;
+
+    return new Vector(x, y);
+  }
 }

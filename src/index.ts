@@ -22,3 +22,4 @@ renderer.setColorsAttributePointer();
 
 Keyboard.subscribe("keypress", renderer.render);
 Mouse.subscribe("click", renderer.render);
+Mouse.subscribe("drag", renderer.render);

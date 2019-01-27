@@ -1,7 +1,7 @@
 import Camera from "./camera";
-import Whiteboard from "./whiteboard";
+import DotManager from "./dot-manager";
 
 export default class App {
   camera = new Camera();
-  whiteboard = new Whiteboard();
+  dotManager = new DotManager();
 }

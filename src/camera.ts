@@ -1,34 +1,37 @@
 import Dot from "./dot";
 import Vector from "./vector";
-import Keyboard from "./keyboard";
+import Keyboard, { Key } from "./keyboard";
+import Mouse, { _MouseEvent } from "./mouse";
 
-const enum Key {
-  Up = 38,
-  Down = 40,
-  Left = 37,
-  Right = 39
-}
 export default class Camera {
   public position = new Vector(0, 0);
+  public dragMode = false;
 
   constructor() {
-    Keyboard.subscribe("keypress", this.onKeyPress);
+    Keyboard.subscribe("keyDown", this.onKeyDown);
+    Keyboard.subscribe("keyUp", this.onKeyUp);
+    Mouse.subscribe("drag", this.onMouseDrag);
   }
 
-  onKeyPress = (ev: KeyboardEvent) => {
-    switch (ev.which) {
-      case Key.Up:
-        this.position.y -= 5;
-        break;
-      case Key.Down:
-        this.position.y += 5;
-        break;
-      case Key.Left:
-        this.position.x -= 5;
-        break;
-      case Key.Right:
-        this.position.x += 5;
-        break;
+  onKeyDown = (ev: KeyboardEvent) => {
+    if (ev.which === Key.Space) {
+      this.dragMode = true;
+    }
+  };
+
+  onKeyUp = (ev: KeyboardEvent) => {
+    if (ev.which === Key.Space) {
+      this.dragMode = false;
+    }
+  };
+
+  onMouseDrag = (ev: _MouseEvent) => {
+    if (this.dragMode) {
+      // @TODO: Need to determine previous position and new position.
+      // This is not right, offset should be from last drag event, not initial one.
+      const offset = ev.target.subtract(ev.origin);
+      this.position.x += offset.x;
+      this.position.y += offset.y;
     }
   };
 }

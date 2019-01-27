@@ -8,18 +8,29 @@ import Mouse, { _MouseEvent } from "./mouse";
 // @TODO: We have a camera already, don't create a new one!
 const camera = new Camera();
 
-export default class Whiteboard {
+export default class DotManager {
   public dots: Dot[] = [];
 
   constructor() {
     Mouse.subscribe("click", this.onMouseClick);
+    Mouse.subscribe("drag", this.onMouseDrag);
   }
 
   onMouseClick = (ev: _MouseEvent) => {
     const color = new Color(0, 0, 0);
+    const position = this.screenToWorldPosition(ev.target);
+    const dot = new Dot({ color, position });
 
-    const position = this.screenToWorldPosition(ev);
+    this.addDot(dot);
+  };
 
+  onMouseDrag = (ev: _MouseEvent) => {
+    if (camera.dragMode) {
+      return;
+    }
+
+    const color = new Color(0, 0, 0);
+    const position = this.screenToWorldPosition(ev.target);
     const dot = new Dot({ color, position });
 
     this.addDot(dot);
@@ -27,12 +38,11 @@ export default class Whiteboard {
 
   addDot(dot: Dot) {
     this.dots.push(dot);
-    console.log("this.dots", this.dots);
   }
 
-  screenToWorldPosition(ev: _MouseEvent) {
-    const x = ev.position.x - camera.position.x;
-    const y = ev.position.y - camera.position.y;
+  screenToWorldPosition(position: Vector) {
+    const x = position.x - camera.position.x;
+    const y = position.y - camera.position.y;
 
     return new Vector(x, y);
   }

@@ -12,7 +12,6 @@ interface DotOptions {
 class Dot extends Entity {
   constructor(options: DotOptions) {
     const position = options.position;
-    console.log("options.position", options.position);
 
     const mesh = new CircleMesh({
       color: options.color,

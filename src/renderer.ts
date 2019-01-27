@@ -177,18 +177,18 @@ export default class Renderer {
 
     this.setUniforms();
 
-    const verts = this.app.whiteboard.dots
+    const verts = this.app.dotManager.dots
       .map(dot => dot.mesh.vectors)
       .reduce(flatten, []);
 
-    const colors = this.app.whiteboard.dots
+    const colors = this.app.dotManager.dots
       .map(dot => dot.mesh.colors)
       .reduce(flatten, []);
 
     this.bufferVectors(verts);
     this.bufferColors(colors);
 
-    this.app.whiteboard.dots.forEach((entity, index) => {
+    this.app.dotManager.dots.forEach((entity, index) => {
       this.renderEntity(entity, index);
     });
   };

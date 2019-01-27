@@ -11,20 +11,18 @@ export const enum Key {
 class Keyboard extends Emitter<KeyboardEvent> {
   constructor() {
     super();
-    window.addEventListener("keydown", this.onKeyPress);
+    window.addEventListener("keydown", this.onKeyDown);
+    window.addEventListener("keyup", this.onKeyUp);
   }
 
-  onKeyPress = (ev: KeyboardEvent) => {
-    // @NOTE: Allow only certain keys.
-    switch (ev.which) {
-      case Key.Space:
-      case Key.Up:
-      case Key.Down:
-      case Key.Left:
-      case Key.Right:
-        this.publish("keypress", ev);
-        break;
+  onKeyDown = (ev: KeyboardEvent) => {
+    if (Key.Space) {
+      this.publish("keyDown", ev);
     }
+  };
+
+  onKeyUp = (ev: KeyboardEvent) => {
+    this.publish("keyUp", ev);
   };
 }
 
