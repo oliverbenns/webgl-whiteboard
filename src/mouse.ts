@@ -41,6 +41,8 @@ class Mouse extends Emitter<_MouseEvent> {
     };
 
     this.publish("drag", mouseEvent);
+
+    this.dragOrigin = new Vector(ev.x, ev.y);
   };
 
   onClick = (ev: MouseEvent) => {
