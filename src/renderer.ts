@@ -5,16 +5,11 @@ import vertexShaderSource from "./vertex.vert";
 import fragmentShaderSource from "./fragment.frag";
 import shader from "./shader";
 import { flatten } from "./utils";
-import App from "./app";
+import Camera from "./camera";
 import Entity from "./entity";
-
-interface RendererOptions {
-  app: App;
-  canvas: HTMLCanvasElement;
-}
+import World from "./world";
 
 export default class Renderer {
-  app: App;
   gl: WebGL2RenderingContext; // @TODO: make private
   colorBuffer: WebGLBuffer;
   vectorsBuffer: WebGLBuffer;
@@ -27,14 +22,12 @@ export default class Renderer {
     scale: WebGLUniformLocation | null;
   };
 
-  constructor(options: RendererOptions) {
-    const gl = options.canvas.getContext("webgl2") as WebGL2RenderingContext;
+  constructor(canvas: HTMLCanvasElement) {
+    const gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
 
     if (!gl) {
       throw new Error("WebGL is not supported.");
     }
-
-    this.app = options.app;
 
     const vertexShader = shader.create(
       gl,
@@ -91,7 +84,6 @@ export default class Renderer {
       scale: gl.getUniformLocation(this.program, "u_scale")
     };
 
-    this.setUniforms();
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   }
 
@@ -105,7 +97,7 @@ export default class Renderer {
     this.gl.uniform2f(this.uniforms.scale, entity.scale.x, entity.scale.y);
   }
 
-  setUniforms() {
+  setUniforms(camera: Camera) {
     this.gl.uniform2f(
       this.uniforms.resolution,
       this.gl.canvas.width,
@@ -114,8 +106,8 @@ export default class Renderer {
 
     this.gl.uniform2f(
       this.uniforms.cameraPosition,
-      this.app.camera.position.x,
-      this.app.camera.position.y
+      camera.position.x,
+      camera.position.y
     );
   }
 
@@ -171,27 +163,27 @@ export default class Renderer {
   }
 
   // @TODO: add vao and transform uniform as class member.
-  render = () => {
+  render(world: World) {
     this.gl.clearColor(255, 255, 255, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    this.setUniforms();
+    this.setUniforms(world.camera);
 
-    const verts = this.app.dotManager.dots
+    const verts = world.dotManager.dots
       .map(dot => dot.mesh.vectors)
       .reduce(flatten, []);
 
-    const colors = this.app.dotManager.dots
+    const colors = world.dotManager.dots
       .map(dot => dot.mesh.colors)
       .reduce(flatten, []);
 
     this.bufferVectors(verts);
     this.bufferColors(colors);
 
-    this.app.dotManager.dots.forEach((entity, index) => {
+    world.dotManager.dots.forEach((entity, index) => {
       this.renderEntity(entity, index);
     });
-  };
+  }
 
   renderEntity(entity: Entity, index: number) {
     this.setTransformUniforms(entity);
