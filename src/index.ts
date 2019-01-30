@@ -20,5 +20,5 @@ renderer.setColorsAttributePointer();
 const render = () => renderer.render(world)
 
 Keyboard.subscribe("keypress", render);
-Mouse.subscribe("click", render);
+Mouse.subscribe("down", render);
 Mouse.subscribe("drag", render);

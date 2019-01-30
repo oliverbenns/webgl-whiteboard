@@ -12,11 +12,15 @@ export default class DotManager {
   public dots: Dot[] = [];
 
   constructor() {
-    Mouse.subscribe("click", this.onMouseClick);
+    Mouse.subscribe("down", this.onMouseDown);
     Mouse.subscribe("drag", this.onMouseDrag);
   }
 
-  onMouseClick = (ev: _MouseEvent) => {
+  onMouseDown = (ev: _MouseEvent) => {
+    if (camera.dragMode) {
+      return;
+    }
+
     const color = new Color(0, 0, 0);
     const position = this.screenToWorldPosition(ev.target);
     const dot = new Dot({ color, position });

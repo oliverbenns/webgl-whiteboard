@@ -14,13 +14,21 @@ class Mouse extends Emitter<_MouseEvent> {
 
   constructor() {
     super();
-    window.addEventListener("click", this.onClick);
     window.addEventListener("mousedown", this.onDown);
     window.addEventListener("mousemove", this.onMove);
     window.addEventListener("mouseup", this.onUp);
   }
 
   onDown = (ev: MouseEvent) => {
+    const position = new Vector(ev.x, ev.y);
+    const mouseEvent = {
+      target: position,
+      // @TODO: Don't want origin here.
+      origin: position
+    };
+
+    this.publish("down", mouseEvent);
+
     this.dragOrigin = new Vector(ev.x, ev.y);
   };
 
@@ -43,17 +51,6 @@ class Mouse extends Emitter<_MouseEvent> {
     this.publish("drag", mouseEvent);
 
     this.dragOrigin = new Vector(ev.x, ev.y);
-  };
-
-  onClick = (ev: MouseEvent) => {
-    const position = new Vector(ev.x, ev.y);
-    const mouseEvent = {
-      target: position,
-      // @TODO: Don't want origin here.
-      origin: position
-    };
-
-    this.publish("click", mouseEvent);
   };
 }
 
