@@ -1,28 +1,18 @@
+import context, { Context } from "./context";
 import Color from "./color";
+import Emitter from "./emitter";
 
-const colors = [
-  new Color(0, 0, 0),
-  new Color(255, 0, 0),
-  new Color(0, 255, 0),
-  new Color(0, 0, 255)
-];
-
-class Ui {
-  private scaleInput: HTMLInputElement;
+class UiColorPicker extends Emitter<Color> {
   private buttons: HTMLButtonElement[];
 
-  constructor(canvas: HTMLCanvasElement) {
-    const body = document.querySelector("body")!;
-    this.scaleInput = document.createElement("input");
-    this.scaleInput.type = "range";
-    this.scaleInput.style.position = "absolute";
-    this.scaleInput.style.top = "10px";
-    this.scaleInput.style.left = "10px";
-    body.insertBefore(this.scaleInput, canvas);
+  constructor(context: Context, colors: Color[]) {
+    super();
 
     this.buttons = colors.map(this.createButton);
 
-    this.buttons.forEach(button => body.insertBefore(button, canvas));
+    this.buttons.forEach(button =>
+      context.body.insertBefore(button, context.canvas)
+    );
   }
 
   createButton = (color: Color, index: number) => {
@@ -43,9 +33,16 @@ class Ui {
 
   onButtonClick = (ev: MouseEvent) => {
     const button = ev.target as HTMLButtonElement;
+    const args = button.value.split(",").map(v => parseInt(v, 10));
+    const color = new Color(...args);
 
-    console.log("button.value", button.value);
+    this.publish("change", color);
   };
 }
 
-export default Ui;
+export default new UiColorPicker(context, [
+  new Color(0, 0, 0),
+  new Color(255, 0, 0),
+  new Color(0, 255, 0),
+  new Color(0, 0, 255)
+]);

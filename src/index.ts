@@ -1,21 +1,13 @@
-import Dot from "./dot";
 import Color from "./color";
 import Renderer from "./renderer";
 import World from "./world";
 import Mouse from "./mouse";
 import Keyboard from "./keyboard";
-import Ui from "./ui";
-import { flatten } from "./utils";
-
-const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+import context from "./context";
 
 const world = new World();
 
-const ui = new Ui(canvas);
-
-const renderer = new Renderer(canvas);
+const renderer = new Renderer(context.canvas);
 
 renderer.setVectorsAttributePointer();
 renderer.setColorsAttributePointer();

@@ -1,3 +1,4 @@
+import context, { Context } from "./context";
 import Emitter from "./emitter";
 import Vector from "./vector";
 
@@ -12,12 +13,11 @@ export interface _MouseEvent {
 class Mouse extends Emitter<_MouseEvent> {
   dragOrigin: Vector | null = null;
 
-  constructor() {
+  constructor(context: Context) {
     super();
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    canvas.addEventListener("mousedown", this.onDown);
-    canvas.addEventListener("mousemove", this.onMove);
-    canvas.addEventListener("mouseup", this.onUp);
+    context.canvas.addEventListener("mousedown", this.onDown);
+    context.canvas.addEventListener("mousemove", this.onMove);
+    context.canvas.addEventListener("mouseup", this.onUp);
   }
 
   onDown = (ev: MouseEvent) => {
@@ -55,4 +55,4 @@ class Mouse extends Emitter<_MouseEvent> {
   };
 }
 
-export default new Mouse();
+export default new Mouse(context);

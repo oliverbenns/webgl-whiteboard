@@ -1,4 +1,3 @@
-import Dot from "./dot";
 import Vector from "./vector";
 import Keyboard, { Key } from "./keyboard";
 import Mouse, { _MouseEvent } from "./mouse";
