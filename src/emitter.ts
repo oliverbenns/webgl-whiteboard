@@ -1,8 +1,7 @@
 type Callback<T> = (arg: T) => void;
-type StringMap<T> = { [key: string]: T };
 
 class Emitter<T> {
-  private events: StringMap<Callback<T>[]> = {};
+  private events: Record<string, Callback<T>[]> = {};
 
   subscribe(name: string, callback: Callback<T>) {
     if (!this.events[name]) {
