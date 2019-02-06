@@ -4,7 +4,7 @@ import CircleMesh from "./circle-mesh";
 import Vector from "./vector";
 import Camera from "./camera";
 
-import Mouse, { _MouseEvent } from "./mouse";
+import Pointer, { PointerEvent } from "./pointer";
 import UiColorPicker from "./ui-color-picker";
 import UiScaleSlider from "./ui-scale-slider";
 
@@ -18,13 +18,13 @@ export default class DotManager {
   private selectedScale = new Vector(32, 32);
 
   constructor() {
-    Mouse.subscribe("down", this.onMouseEvent);
-    Mouse.subscribe("drag", this.onMouseEvent);
+    Pointer.subscribe("down", this.onPointerEvent);
+    Pointer.subscribe("drag", this.onPointerEvent);
     UiColorPicker.subscribe("change", this.onColorChange);
     UiScaleSlider.subscribe("change", this.onScaleChange);
   }
 
-  onMouseEvent = (ev: _MouseEvent) => {
+  onPointerEvent = (ev: PointerEvent) => {
     if (camera.dragMode) {
       return;
     }

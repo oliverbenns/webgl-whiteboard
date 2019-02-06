@@ -2,15 +2,13 @@ import context, { Context } from "./context";
 import Emitter from "./emitter";
 import Vector from "./vector";
 
-interface MouseEventType {}
-
 // @TODO: Can/should we add world coords?
-export interface _MouseEvent {
+export interface PointerEvent {
   target: Vector;
   origin: Vector;
 }
 
-class Mouse extends Emitter<_MouseEvent> {
+class Pointer extends Emitter<PointerEvent> {
   dragOrigin: Vector | null = null;
 
   constructor(context: Context) {
@@ -22,18 +20,18 @@ class Mouse extends Emitter<_MouseEvent> {
 
   onDown = (ev: MouseEvent) => {
     const position = new Vector(ev.x, ev.y);
-    const mouseEvent = {
+    const pointerEvent = {
       target: position,
       // @TODO: Don't want origin here.
       origin: position
     };
 
-    this.publish("down", mouseEvent);
+    this.publish("down", pointerEvent);
 
     this.dragOrigin = new Vector(ev.x, ev.y);
   };
 
-  onUp = (ev: MouseEvent) => {
+  onUp = () => {
     this.dragOrigin = null;
   };
 
@@ -44,15 +42,15 @@ class Mouse extends Emitter<_MouseEvent> {
       return;
     }
 
-    const mouseEvent = {
+    const pointerEvent = {
       target: new Vector(ev.x, ev.y),
       origin: this.dragOrigin
     };
 
-    this.publish("drag", mouseEvent);
+    this.publish("drag", pointerEvent);
 
     this.dragOrigin = new Vector(ev.x, ev.y);
   };
 }
 
-export default new Mouse(context);
+export default new Pointer(context);

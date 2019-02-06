@@ -1,6 +1,6 @@
 import Vector from "./vector";
 import Keyboard, { Key } from "./keyboard";
-import Mouse, { _MouseEvent } from "./mouse";
+import Pointer, { PointerEvent } from "./pointer";
 
 export default class Camera {
   public position = new Vector(0, 0);
@@ -9,7 +9,7 @@ export default class Camera {
   constructor() {
     Keyboard.subscribe("keyDown", this.onKeyDown);
     Keyboard.subscribe("keyUp", this.onKeyUp);
-    Mouse.subscribe("drag", this.onMouseDrag);
+    Pointer.subscribe("drag", this.onPointerDrag);
   }
 
   onKeyDown = (ev: KeyboardEvent) => {
@@ -26,7 +26,7 @@ export default class Camera {
     }
   };
 
-  onMouseDrag = (ev: _MouseEvent) => {
+  onPointerDrag = (ev: PointerEvent) => {
     if (!this.dragMode) {
       return;
     }

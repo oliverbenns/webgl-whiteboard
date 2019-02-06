@@ -1,7 +1,7 @@
 import Color from "./color";
 import Renderer from "./renderer";
 import World from "./world";
-import Mouse from "./mouse";
+import Pointer from "./pointer";
 import Keyboard from "./keyboard";
 import context from "./context";
 
@@ -15,5 +15,5 @@ renderer.setColorsAttributePointer();
 const render = () => renderer.render(world);
 
 Keyboard.subscribe("keypress", render);
-Mouse.subscribe("down", render);
-Mouse.subscribe("drag", render);
+Pointer.subscribe("down", render);
+Pointer.subscribe("drag", render);
