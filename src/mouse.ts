@@ -14,9 +14,10 @@ class Mouse extends Emitter<_MouseEvent> {
 
   constructor() {
     super();
-    window.addEventListener("mousedown", this.onDown);
-    window.addEventListener("mousemove", this.onMove);
-    window.addEventListener("mouseup", this.onUp);
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    canvas.addEventListener("mousedown", this.onDown);
+    canvas.addEventListener("mousemove", this.onMove);
+    canvas.addEventListener("mouseup", this.onUp);
   }
 
   onDown = (ev: MouseEvent) => {
