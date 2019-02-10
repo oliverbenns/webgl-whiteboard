@@ -8,8 +8,8 @@ class Dot {
   mesh: CircleMesh;
   position: Vector;
   scale: Vector;
-  positionUniform: WebGLUniformLocation | null;
-  scaleUniform: WebGLUniformLocation | null;
+  positionUniform: WebGLUniformLocation | null = null;
+  scaleUniform: WebGLUniformLocation | null = null;
 
   constructor(position: Vector) {
     this.scale = new Vector(UiScaleSlider.value, UiScaleSlider.value);
@@ -18,8 +18,6 @@ class Dot {
       polyCount: 64
     });
     this.position = position;
-    this.positionUniform = null;
-    this.scaleUniform = null;
   }
 
   render(renderer: Renderer, index: number) {
@@ -51,8 +49,6 @@ class Dot {
     const offset = index * this.mesh.vectors.length;
     const count = this.mesh.vectors.length;
     renderer.gl.drawArrays(primitiveType, offset, count);
-
-    this.mesh.buffered = true;
   }
 }
 

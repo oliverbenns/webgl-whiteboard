@@ -3,6 +3,7 @@ import Vector from "./vector";
 import _program from "./program";
 import vertexShaderSource from "./vertex.vert";
 import fragmentShaderSource from "./fragment.frag";
+import context from "./context";
 import shader from "./shader";
 import { flatten } from "./utils";
 import Camera from "./camera";
@@ -14,9 +15,6 @@ export default class Renderer {
   vectorsBuffer: WebGLBuffer;
   program: WebGLProgram;
   vao: WebGLVertexArrayObject;
-  uniforms: {
-    resolution: WebGLUniformLocation | null;
-  };
 
   constructor(canvas: HTMLCanvasElement) {
     const gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
@@ -70,19 +68,7 @@ export default class Renderer {
     this.vao = vao;
     gl.bindVertexArray(this.vao);
 
-    this.uniforms = {
-      resolution: gl.getUniformLocation(this.program, "u_resolution")
-    };
-
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  }
-
-  setUniforms(camera: Camera) {
-    this.gl.uniform2f(
-      this.uniforms.resolution,
-      this.gl.canvas.width,
-      this.gl.canvas.height
-    );
   }
 
   setVectorsAttributePointer() {
@@ -141,7 +127,7 @@ export default class Renderer {
     this.gl.clearColor(255, 255, 255, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    this.setUniforms(world.camera);
+    context.render(this);
 
     world.camera.render(this);
 
