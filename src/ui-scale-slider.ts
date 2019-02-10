@@ -1,11 +1,20 @@
 import context, { Context } from "./context";
 import Emitter from "./emitter";
 
-class UiScaleSlider extends Emitter<number> {
+interface UiScaleSliderOptions {
+  min: number;
+  max: number;
+}
+class UiScaleSlider {
+  public value: number;
   private element: HTMLInputElement;
+  private min: number;
+  private max: number;
 
-  constructor(context: Context) {
-    super();
+  constructor(context: Context, opts: UiScaleSliderOptions) {
+    this.min = opts.min;
+    this.max = opts.max;
+    this.value = (opts.min + opts.max) / 2;
 
     this.element = this.createSlider();
 
@@ -18,8 +27,9 @@ class UiScaleSlider extends Emitter<number> {
     slider.style.position = "absolute";
     slider.style.top = "10px";
     slider.style.left = "10px";
-    slider.min = "0";
-    slider.max = "50";
+    slider.min = this.min.toString();
+    slider.max = this.max.toString();
+    slider.value = this.value.toString();
     slider.onchange = this.onSliderChange;
 
     return slider;
@@ -27,10 +37,11 @@ class UiScaleSlider extends Emitter<number> {
 
   onSliderChange = (ev: Event) => {
     const input = ev.target as HTMLInputElement;
-    const value = parseInt(input.value, 10);
-
-    this.publish("change", value);
+    this.value = parseInt(input.value, 10);
   };
 }
 
-export default new UiScaleSlider(context);
+export default new UiScaleSlider(context, {
+  min: 10,
+  max: 50
+});

@@ -8,11 +8,13 @@ interface MeshOptions {
 
 export default class Mesh {
   colors: Color[];
+  buffered: boolean;
   vectors: Vector[];
 
   constructor(options: MeshOptions) {
     this.colors = options.colors;
     this.vectors = options.vectors;
+    this.buffered = false;
   }
 
   // toArray() {

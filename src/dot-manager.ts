@@ -1,27 +1,21 @@
 import Color from "./color";
-import Entity from "./entity";
+import Dot from "./dot";
 import CircleMesh from "./circle-mesh";
 import Vector from "./vector";
 import Camera from "./camera";
+import Renderer from "./renderer";
 
 import Pointer, { PointerEvent } from "./pointer";
-import UiColorPicker from "./ui-color-picker";
-import UiScaleSlider from "./ui-scale-slider";
 
 // @TODO: We have a camera already, don't create a new one!
 const camera = new Camera();
 
 export default class DotManager {
-  public dots: Entity[] = [];
-
-  private selectedColor = new Color(0, 0, 0);
-  private selectedScale = new Vector(32, 32);
+  public dots: Dot[] = [];
 
   constructor() {
     Pointer.subscribe("down", this.onPointerEvent);
     Pointer.subscribe("drag", this.onPointerEvent);
-    UiColorPicker.subscribe("change", this.onColorChange);
-    UiScaleSlider.subscribe("change", this.onScaleChange);
   }
 
   onPointerEvent = (ev: PointerEvent) => {
@@ -30,27 +24,9 @@ export default class DotManager {
     }
     const position = this.screenToWorldPosition(ev.target);
 
-    const dot = this.createDot(position);
+    const dot = new Dot(position);
 
     this.dots.push(dot);
-  };
-
-  createDot = (position: Vector): Entity => {
-    const scale = this.selectedScale;
-    const mesh = new CircleMesh({
-      color: this.selectedColor,
-      polyCount: 64
-    });
-
-    return { scale, position, mesh };
-  };
-
-  onColorChange = (color: Color) => {
-    this.selectedColor = color;
-  };
-
-  onScaleChange = (scale: number) => {
-    this.selectedScale = new Vector(scale, scale);
   };
 
   screenToWorldPosition(position: Vector) {
@@ -58,5 +34,11 @@ export default class DotManager {
     const y = position.y - camera.position.y;
 
     return new Vector(x, y);
+  }
+
+  render(renderer: Renderer) {
+    this.dots.forEach((ent, index) => {
+      ent.render(renderer, index);
+    });
   }
 }

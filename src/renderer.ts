@@ -6,7 +6,6 @@ import fragmentShaderSource from "./fragment.frag";
 import shader from "./shader";
 import { flatten } from "./utils";
 import Camera from "./camera";
-import Entity from "./entity";
 import World from "./world";
 
 export default class Renderer {
@@ -17,9 +16,6 @@ export default class Renderer {
   vao: WebGLVertexArrayObject;
   uniforms: {
     resolution: WebGLUniformLocation | null;
-    cameraPosition: WebGLUniformLocation | null;
-    position: WebGLUniformLocation | null;
-    scale: WebGLUniformLocation | null;
   };
 
   constructor(canvas: HTMLCanvasElement) {
@@ -75,26 +71,10 @@ export default class Renderer {
     gl.bindVertexArray(this.vao);
 
     this.uniforms = {
-      // once
-      resolution: gl.getUniformLocation(this.program, "u_resolution"),
-      cameraPosition: gl.getUniformLocation(this.program, "u_camera_position"),
-
-      // per entity
-      position: gl.getUniformLocation(this.program, "u_position"),
-      scale: gl.getUniformLocation(this.program, "u_scale")
+      resolution: gl.getUniformLocation(this.program, "u_resolution")
     };
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  }
-
-  setTransformUniforms(entity: Entity) {
-    this.gl.uniform2f(
-      this.uniforms.position,
-      entity.position.x,
-      entity.position.y
-    );
-
-    this.gl.uniform2f(this.uniforms.scale, entity.scale.x, entity.scale.y);
   }
 
   setUniforms(camera: Camera) {
@@ -102,12 +82,6 @@ export default class Renderer {
       this.uniforms.resolution,
       this.gl.canvas.width,
       this.gl.canvas.height
-    );
-
-    this.gl.uniform2f(
-      this.uniforms.cameraPosition,
-      camera.position.x,
-      camera.position.y
     );
   }
 
@@ -169,6 +143,8 @@ export default class Renderer {
 
     this.setUniforms(world.camera);
 
+    world.camera.render(this);
+
     const verts = world.dotManager.dots
       .map(dot => dot.mesh.vectors)
       .reduce(flatten, []);
@@ -177,23 +153,13 @@ export default class Renderer {
       .map(dot => dot.mesh.colors)
       .reduce(flatten, []);
 
+    const t1 = performance.now();
+
     this.bufferVectors(verts);
     this.bufferColors(colors);
 
-    world.dotManager.dots.forEach((entity, index) => {
-      this.renderEntity(entity, index);
-    });
-  }
-
-  renderEntity(entity: Entity, index: number) {
-    this.setTransformUniforms(entity);
-
-    const primitiveType = this.gl.TRIANGLES;
-    // @NOTE: If we ever have scene entities of different vertex lengths,
-    // we will need to keep track of the offset. Either in a var or using a
-    // .reduce instead of .forEach?
-    const offset = index * entity.mesh.vectors.length;
-    const count = entity.mesh.vectors.length;
-    this.gl.drawArrays(primitiveType, offset, count);
+    const t2 = performance.now();
+    console.log("timetaken:", t2 - t1 + "ms");
+    world.dotManager.render(this);
   }
 }

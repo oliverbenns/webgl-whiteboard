@@ -1,12 +1,12 @@
 import context, { Context } from "./context";
 import Color from "./color";
-import Emitter from "./emitter";
 
-class UiColorPicker extends Emitter<Color> {
+class UiColorPicker {
   private buttons: HTMLButtonElement[];
+  public value: Color;
 
   constructor(context: Context, colors: Color[]) {
-    super();
+    this.value = colors[0];
 
     this.buttons = colors.map(this.createButton);
 
@@ -19,13 +19,13 @@ class UiColorPicker extends Emitter<Color> {
     const button = document.createElement("button");
     button.value = color.toArray().toString();
     button.style.position = "absolute";
-    button.style.width = "20px";
-    button.style.height = "20px";
+    button.style.width = "30px";
+    button.style.height = "30px";
     button.style.padding = "0";
-    button.style.top = "10px";
+    button.style.top = "5px";
     button.style.background = `rgba(${color.toArray().toString()})`;
     button.style.border = "0px";
-    button.style.left = `${200 + index * 30}px`;
+    button.style.left = `${200 + index * 35}px`;
     button.onclick = this.onButtonClick;
 
     return button;
@@ -36,7 +36,7 @@ class UiColorPicker extends Emitter<Color> {
     const args = button.value.split(",").map(v => parseInt(v, 10));
     const color = new Color(...args);
 
-    this.publish("change", color);
+    this.value = color;
   };
 }
 
