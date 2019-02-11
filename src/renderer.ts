@@ -1,13 +1,13 @@
 import Color from "./color";
 import Vector from "./vector";
+import Camera from './camera';
 import _program from "./program";
 import vertexShaderSource from "./vertex.vert";
 import fragmentShaderSource from "./fragment.frag";
-import context from "./context";
+import Context from "./context";
 import shader from "./shader";
 import { flatten } from "./utils";
-import Camera from "./camera";
-import World from "./world";
+import DotManager from './dot-manager';
 
 export default class Renderer {
   gl: WebGL2RenderingContext; // @TODO: make private
@@ -123,19 +123,19 @@ export default class Renderer {
   }
 
   // @TODO: add vao and transform uniform as class member.
-  render(world: World) {
+  render = () => {
     this.gl.clearColor(255, 255, 255, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    context.render(this);
+    Context.render(this);
 
-    world.camera.render(this);
+    Camera.render(this);
 
-    const verts = world.dotManager.dots
+    const verts = DotManager.dots
       .map(dot => dot.mesh.vectors)
       .reduce(flatten, []);
 
-    const colors = world.dotManager.dots
+    const colors = DotManager.dots
       .map(dot => dot.mesh.colors)
       .reduce(flatten, []);
 
@@ -146,6 +146,6 @@ export default class Renderer {
 
     const t2 = performance.now();
     console.log("timetaken:", t2 - t1 + "ms");
-    world.dotManager.render(this);
+    DotManager.render(this);
   }
 }

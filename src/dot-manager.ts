@@ -7,10 +7,7 @@ import Renderer from "./renderer";
 
 import Pointer, { PointerEvent } from "./pointer";
 
-// @TODO: We have a camera already, don't create a new one!
-const camera = new Camera();
-
-export default class DotManager {
+class DotManager {
   public dots: Dot[] = [];
 
   constructor() {
@@ -19,7 +16,7 @@ export default class DotManager {
   }
 
   onPointerEvent = (ev: PointerEvent) => {
-    if (camera.dragMode) {
+    if (Camera.dragMode) {
       return;
     }
     const position = this.screenToWorldPosition(ev.target);
@@ -30,8 +27,8 @@ export default class DotManager {
   };
 
   screenToWorldPosition(position: Vector) {
-    const x = position.x - camera.position.x;
-    const y = position.y - camera.position.y;
+    const x = position.x - Camera.position.x;
+    const y = position.y - Camera.position.y;
 
     return new Vector(x, y);
   }
@@ -42,3 +39,5 @@ export default class DotManager {
     });
   }
 }
+
+export default new DotManager()

@@ -3,7 +3,7 @@ import Keyboard, { Key } from "./keyboard";
 import Pointer, { PointerEvent } from "./pointer";
 import Renderer from './renderer';
 
-export default class Camera {
+class Camera {
   public position = new Vector(0, 0);
   public dragMode = false;
   private uniform: WebGLUniformLocation | null;
@@ -51,3 +51,5 @@ export default class Camera {
     );
   }
 }
+
+export default new Camera()
