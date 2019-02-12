@@ -8,9 +8,15 @@ interface CircleMeshOptions {
 }
 
 export default class CircleMesh extends Mesh {
-  constructor(options: CircleMeshOptions) {
-    const originAngle = (Math.PI * 2) / options.polyCount;
+  static cache: Record<number, Vector[]> = {};
+  static createVectors = (polyCount: number): Vector[] => {
+    const cache = CircleMesh.cache[polyCount];
 
+    if (cache) {
+      return cache;
+    }
+
+    const originAngle = (Math.PI * 2) / polyCount;
     const vectors: Vector[] = [];
 
     const createFace = () => {
@@ -22,7 +28,7 @@ export default class CircleMesh extends Mesh {
       return [a, b, c];
     };
 
-    for (let i = 0; i < options.polyCount; i++) {
+    for (let i = 0; i < polyCount; i++) {
       const faceAngle = originAngle * i;
 
       const face = createFace();
@@ -32,6 +38,13 @@ export default class CircleMesh extends Mesh {
       vectors.push(...face);
     }
 
+    CircleMesh.cache[polyCount] = vectors;
+
+    return vectors;
+  };
+
+  constructor(options: CircleMeshOptions) {
+    const vectors = CircleMesh.createVectors(options.polyCount);
     const colors = new Array(vectors.length).fill(options.color);
 
     super({ colors, vectors });
