@@ -1,13 +1,13 @@
 import Color from "./color";
 import Vector from "./vector";
-import Camera from './camera';
+import Camera from "./camera";
 import _program from "./program";
 import vertexShaderSource from "./vertex.vert";
 import fragmentShaderSource from "./fragment.frag";
 import Context from "./context";
 import shader from "./shader";
 import { flatten } from "./utils";
-import DotManager from './dot-manager';
+import DotManager from "./dot-manager";
 
 export default class Renderer {
   gl: WebGL2RenderingContext; // @TODO: make private
@@ -15,6 +15,8 @@ export default class Renderer {
   vectorsBuffer: WebGLBuffer;
   program: WebGLProgram;
   vao: WebGLVertexArrayObject;
+  vectorBufferData: number[] = [];
+  colorBufferData: number[] = [];
 
   constructor(canvas: HTMLCanvasElement) {
     const gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
@@ -107,19 +109,43 @@ export default class Renderer {
   }
 
   bufferColors(colors: Color[]) {
-    const colorData = colors.map(c => c.toArray()).reduce(flatten, []); // @TODO flatten deep?
-    const data = new Uint8Array(colorData);
+    const colorCountToAdd = colors.length - this.colorBufferData.length / 4;
+    let offset = colors.length - colorCountToAdd;
+
+    while (offset < colors.length) {
+      const color = colors[offset];
+
+      this.colorBufferData.push(color.r);
+      this.colorBufferData.push(color.g);
+      this.colorBufferData.push(color.b);
+      this.colorBufferData.push(color.a);
+
+      offset++;
+    }
+
+    const data = new Uint8Array(this.colorBufferData);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
   }
 
   bufferVectors(vectors: Vector[]) {
-    const vectorData = vectors.map(v => v.toArray()).reduce(flatten, []);
-    const data = new Float32Array(vectorData);
+    const vectorCountToAdd = vectors.length - this.vectorBufferData.length / 2;
+    let offset = vectors.length - vectorCountToAdd;
+
+    while (offset < vectors.length) {
+      const vector = vectors[offset];
+
+      this.vectorBufferData.push(vector.x);
+      this.vectorBufferData.push(vector.y);
+
+      offset++;
+    }
+
+    const bufferData = new Float32Array(this.vectorBufferData);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vectorsBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, bufferData, this.gl.STATIC_DRAW);
   }
 
   // @TODO: add vao and transform uniform as class member.
