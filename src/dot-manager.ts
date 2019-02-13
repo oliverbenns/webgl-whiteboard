@@ -1,6 +1,5 @@
 import Color from "./color";
 import Dot from "./dot";
-import CircleMesh from "./circle-mesh";
 import Vector from "./vector";
 import Camera from "./camera";
 import Renderer from "./renderer";
@@ -40,4 +39,4 @@ class DotManager {
   }
 }
 
-export default new DotManager()
+export default new DotManager();

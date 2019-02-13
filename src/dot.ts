@@ -1,11 +1,11 @@
-import CircleMesh from "./circle-mesh";
+import DotMesh from "./dot-mesh";
 import Renderer from "./renderer";
 import Vector from "./vector";
 import UiColorPicker from "./ui-color-picker";
 import UiScaleSlider from "./ui-scale-slider";
 
 class Dot {
-  mesh: CircleMesh;
+  mesh: DotMesh;
   position: Vector;
   scale: Vector;
   positionUniform: WebGLUniformLocation | null = null;
@@ -13,9 +13,9 @@ class Dot {
 
   constructor(position: Vector) {
     this.scale = new Vector(UiScaleSlider.value, UiScaleSlider.value);
-    this.mesh = new CircleMesh({
+    this.mesh = new DotMesh({
       color: UiColorPicker.value,
-      polyCount: 64
+      polyCount: 20
     });
     this.position = position;
   }

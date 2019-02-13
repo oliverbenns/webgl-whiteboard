@@ -1,16 +1,17 @@
 import Color from "./color";
-import Mesh from "./mesh";
 import Vector from "./vector";
 
-interface CircleMeshOptions {
+interface DotMeshOptions {
   color: Color;
   polyCount: number;
 }
 
-export default class CircleMesh extends Mesh {
+export default class DotMesh {
+  colors: Color[];
+  vectors: Vector[];
   static cache: Record<number, Vector[]> = {};
   static createVectors = (polyCount: number): Vector[] => {
-    const cache = CircleMesh.cache[polyCount];
+    const cache = DotMesh.cache[polyCount];
 
     if (cache) {
       return cache;
@@ -38,15 +39,13 @@ export default class CircleMesh extends Mesh {
       vectors.push(...face);
     }
 
-    CircleMesh.cache[polyCount] = vectors;
+    DotMesh.cache[polyCount] = vectors;
 
     return vectors;
   };
 
-  constructor(options: CircleMeshOptions) {
-    const vectors = CircleMesh.createVectors(options.polyCount);
-    const colors = new Array(vectors.length).fill(options.color);
-
-    super({ colors, vectors });
+  constructor(options: DotMeshOptions) {
+    this.vectors = DotMesh.createVectors(options.polyCount);
+    this.colors = new Array(this.vectors.length).fill(options.color);
   }
 }
