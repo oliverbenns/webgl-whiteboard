@@ -1,5 +1,6 @@
 import Color from "./color";
 import Vector from "./vector";
+import { flatten } from "./utils";
 
 interface DotMeshOptions {
   color: Color;
@@ -7,8 +8,8 @@ interface DotMeshOptions {
 }
 
 export default class DotMesh {
-  colors: Color[];
-  vectors: Vector[];
+  colors: number[];
+  vectors: number[];
   static cache: Record<number, Vector[]> = {};
   static createVectors = (polyCount: number): Vector[] => {
     const cache = DotMesh.cache[polyCount];
@@ -45,7 +46,13 @@ export default class DotMesh {
   };
 
   constructor(options: DotMeshOptions) {
-    this.vectors = DotMesh.createVectors(options.polyCount);
-    this.colors = new Array(this.vectors.length).fill(options.color);
+    const vectors = DotMesh.createVectors(options.polyCount);
+    console.log("vectors", vectors);
+    this.vectors = vectors.map((v: Vector) => v.toArray()).reduce(flatten, []);
+
+    const colors = new Array(vectors.length).fill(options.color);
+    console.log("colors", colors);
+
+    this.colors = colors.map((c: Color) => c.toArray()).reduce(flatten, []);
   }
 }

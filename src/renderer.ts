@@ -108,17 +108,13 @@ export default class Renderer {
     );
   }
 
-  bufferColors(colors: Color[]) {
-    const colorCountToAdd = colors.length - this.colorBufferData.length / 4;
+  bufferColors(colors: number[]) {
+    const colorCountToAdd = colors.length - this.colorBufferData.length;
     let offset = colors.length - colorCountToAdd;
 
     while (offset < colors.length) {
-      const color = colors[offset];
-
-      this.colorBufferData.push(color.r);
-      this.colorBufferData.push(color.g);
-      this.colorBufferData.push(color.b);
-      this.colorBufferData.push(color.a);
+      const num = colors[offset];
+      this.colorBufferData.push(num);
 
       offset++;
     }
@@ -129,15 +125,13 @@ export default class Renderer {
     this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
   }
 
-  bufferVectors(vectors: Vector[]) {
-    const vectorCountToAdd = vectors.length - this.vectorBufferData.length / 2;
+  bufferVectors(vectors: number[]) {
+    const vectorCountToAdd = vectors.length - this.vectorBufferData.length;
     let offset = vectors.length - vectorCountToAdd;
 
     while (offset < vectors.length) {
-      const vector = vectors[offset];
-
-      this.vectorBufferData.push(vector.x);
-      this.vectorBufferData.push(vector.y);
+      const num = vectors[offset];
+      this.vectorBufferData.push(num);
 
       offset++;
     }
@@ -156,22 +150,25 @@ export default class Renderer {
     Context.render(this);
 
     Camera.render(this);
-
-    const verts = DotManager.dots
-      .map(dot => dot.mesh.vectors)
-      .reduce(flatten, []);
-
-    const colors = DotManager.dots
-      .map(dot => dot.mesh.colors)
-      .reduce(flatten, []);
-
     const t1 = performance.now();
+
+    const verts: number[] = [];
+    const colors: number[] = [];
+
+    DotManager.dots.forEach(dot => {
+      dot.mesh.colors.forEach(c => colors.push(c));
+      dot.mesh.vectors.forEach(v => verts.push(v));
+    });
+
+    console.log("colors", colors);
+    console.log("verts", verts);
+    const t2 = performance.now();
+
+    console.log("timetaken:::", t2 - t1 + "ms");
 
     this.bufferVectors(verts);
     this.bufferColors(colors);
 
-    const t2 = performance.now();
-    console.log("timetaken:", t2 - t1 + "ms");
     DotManager.render(this);
-  }
+  };
 }
